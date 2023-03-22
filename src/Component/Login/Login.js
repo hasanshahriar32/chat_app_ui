@@ -13,6 +13,9 @@ const Login = () => {
           justifyContent="center"
           p={3}
           bg={"white"}
+          _dark={{
+            bg: "gray.800",
+          }}
           m="0 0 15px 0"
           borderRadius="lg"
           borderWidth="1px"

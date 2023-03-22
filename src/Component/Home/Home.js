@@ -1,13 +1,15 @@
-import { Button } from "@chakra-ui/react";
+import { Button, Container } from "@chakra-ui/react";
 import React from "react";
 import { Link } from "react-router-dom";
 
 const Home = () => {
   return (
     <div className="login-background">
-      <Link to="/login">
-        <Button>Login to Start</Button>
-      </Link>
+      <Container maxW="xl">
+        <Link to="/chat">
+          <Button>Start Chatting</Button>
+        </Link>
+      </Container>
     </div>
   );
 };

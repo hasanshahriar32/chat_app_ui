@@ -1,0 +1,23 @@
+.login-background {
+  min-height: 100vh;
+  display: flex;
+  background-image: url("./chat.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+.chat-header {
+  background-color: #f8f8f8;
+  border-bottom: 1px solid #e6e6e6;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-top: 50px;
+}

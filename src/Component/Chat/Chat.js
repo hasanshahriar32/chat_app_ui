@@ -1,7 +1,8 @@
+import { Box, Container, Text } from "@chakra-ui/react";
 import React, { useEffect, useRef, useState } from "react";
-import BIRDS from "vanta/dist/vanta.topology.min";
+import BIRDS from "vanta/dist/vanta.net.min";
 // Make sure window.THREE is defined, e.g. by including three.min.js in the document head using a <script> tag
-import "./Chat.css";
+// import "./Chat.css";
 
 const Chat = (props) => {
   const [vantaEffect, setVantaEffect] = useState(null);
@@ -28,16 +29,7 @@ const Chat = (props) => {
   useEffect(() => {
     fetchChats();
   }, []);
-  return (
-    <div className="chat" ref={myRef}>
-      <h1>Chat</h1>
-      <h1>Chat</h1>
-      <h1>Chat</h1>
-      <h1>Chat</h1>
-      <h1>Chat</h1>
-      <h1>Chat</h1>
-    </div>
-  );
+  return <div className="chat" ref={myRef}></div>;
 };
 
 export default Chat;

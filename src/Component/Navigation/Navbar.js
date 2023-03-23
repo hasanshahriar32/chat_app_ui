@@ -12,6 +12,7 @@ import { HiMenu, HiX } from "react-icons/hi";
 import { RxAvatar, RxMoon } from "react-icons/rx";
 import { NavLink } from "react-router-dom";
 import { SlLogin } from "react-icons/sl";
+import { VscColorMode } from "react-icons/vsc";
 
 const Navbar = () => {
   const { toggleColorMode } = useColorMode();
@@ -82,7 +83,7 @@ const Navbar = () => {
         size="md"
         fontSize="lg"
         variant="ghost"
-        icon={<RxMoon />}
+        icon={<VscColorMode />}
         aria-label="Toggle Color Mode"
         onClick={toggleColorMode}
       />

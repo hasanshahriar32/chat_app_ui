@@ -38,7 +38,7 @@ const Navbar = () => {
         </NavLink>
       </Box>
       <Spacer />
-      <Flex
+      {/* <Flex
         style={{ display: "flex", justifyContent: "flex-end" }}
         align="center"
       >
@@ -51,7 +51,7 @@ const Navbar = () => {
             aria-label="Toggle Navigation"
           />
         </Box>
-      </Flex>
+      </Flex> */}
       {/* <Stack
         direction={{ base: "column", md: "row" }}
         display={{ base: show ? "block" : "none", md: "flex" }}

@@ -13,7 +13,8 @@ const Routes = () => {
       path: "/",
       element: <Main></Main>,
       children: [
-        { path: "/", element: <Home></Home> },
+        { path: "/", element: <Chat></Chat> },
+        { path: "/home", element: <Home></Home> },
         {
           path: "/chat",
           element: <Chat></Chat>,

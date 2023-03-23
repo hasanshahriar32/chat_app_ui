@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { HiMenu, HiX } from "react-icons/hi";
 import { RxAvatar, RxMoon } from "react-icons/rx";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const Navbar = () => {
   const { toggleColorMode } = useColorMode();
@@ -34,11 +34,11 @@ const Navbar = () => {
         align="center"
       >
         <Box>
-          <Link to="/">
+          <NavLink to="/">
             <Box style={{ marginRight: 50 }} fontSize="lg" fontWeight="bold">
               ChatFriend
             </Box>
-          </Link>
+          </NavLink>
         </Box>
         <Spacer />
         <Box display={{ base: "block", md: "none" }} onClick={handleToggle}>
@@ -60,22 +60,22 @@ const Navbar = () => {
         flexGrow={1}
         spacing={6}
       >
-        <Link to="/">
+        <NavLink to="/">
           <Box>Home</Box>
-        </Link>
-        <Link to="/login">
+        </NavLink>
+        <NavLink to="/login">
           <Box>Login</Box>
-        </Link>
+        </NavLink>
 
-        <Link to="/chat">
+        <NavLink to="/chat">
           <Box>Chat</Box>
-        </Link>
-        <Link to="/about">
+        </NavLink>
+        <NavLink to="/about">
           <Box>About</Box>
-        </Link>
-        <Link to="/contact">
+        </NavLink>
+        <NavLink to="/contact">
           <Box>Contact</Box>
-        </Link>
+        </NavLink>
       </Stack>
       <IconButton
         size="md"
@@ -86,9 +86,9 @@ const Navbar = () => {
         onClick={toggleColorMode}
       />
       <Box style={{ marginLeft: 30 }}>
-        <Link to="/profile">
+        <NavLink to="/profile">
           <RxAvatar />
-        </Link>
+        </NavLink>
       </Box>
     </Flex>
   );

@@ -11,6 +11,7 @@ import {
 import { HiMenu, HiX } from "react-icons/hi";
 import { RxAvatar, RxMoon } from "react-icons/rx";
 import { NavLink } from "react-router-dom";
+import { SlLogin } from "react-icons/sl";
 
 const Navbar = () => {
   const { toggleColorMode } = useColorMode();
@@ -23,24 +24,24 @@ const Navbar = () => {
     <Flex
       as="nav"
       align="center"
-      justify="space-between"
+      justify="flex-end"
       wrap="wrap"
       padding={6}
       bg={useColorModeValue("white", "gray.800")}
       color={textColor}
     >
+      <Box>
+        <NavLink to="/chat">
+          <Box style={{ marginRight: 50 }} fontSize="lg" fontWeight="bold">
+            ChatFriend
+          </Box>
+        </NavLink>
+      </Box>
+      <Spacer />
       <Flex
-        style={{ display: "flex", justifyContent: "space-between" }}
+        style={{ display: "flex", justifyContent: "flex-end" }}
         align="center"
       >
-        <Box>
-          <NavLink to="/">
-            <Box style={{ marginRight: 50 }} fontSize="lg" fontWeight="bold">
-              ChatFriend
-            </Box>
-          </NavLink>
-        </Box>
-        <Spacer />
         <Box display={{ base: "block", md: "none" }} onClick={handleToggle}>
           <IconButton
             size="md"
@@ -51,7 +52,7 @@ const Navbar = () => {
           />
         </Box>
       </Flex>
-      <Stack
+      {/* <Stack
         direction={{ base: "column", md: "row" }}
         display={{ base: show ? "block" : "none", md: "flex" }}
         width={{ base: "full", md: "auto" }}
@@ -76,7 +77,7 @@ const Navbar = () => {
         <NavLink to="/contact">
           <Box>Contact</Box>
         </NavLink>
-      </Stack>
+      </Stack> */}
       <IconButton
         size="md"
         fontSize="lg"
@@ -86,8 +87,8 @@ const Navbar = () => {
         onClick={toggleColorMode}
       />
       <Box style={{ marginLeft: 30 }}>
-        <NavLink to="/profile">
-          <RxAvatar />
+        <NavLink to="/login">
+          <SlLogin fontWeight="5" />
         </NavLink>
       </Box>
     </Flex>

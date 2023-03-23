@@ -33,7 +33,7 @@ const Login = () => {
           fontFamily="monospace"
           fontSize="2xl"
         >
-          <Text>Your Chit-Chat Application</Text>
+          <Text>Your Chit-Chat App</Text>
         </Box>
         <Box
           d="flex"

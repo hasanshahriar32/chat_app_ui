@@ -13,11 +13,14 @@ import React, { useState } from "react";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 
 const SignUp = () => {
+  const [show, setShow] = useState(false);
   const [name, setName] = useState();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [confirmPassword, setConfirmPassword] = useState();
   const [pic, setPic] = useState();
+
+  const handleClick = () => setShow(!show);
   return (
     <div>
       <VStack
@@ -45,17 +48,42 @@ const SignUp = () => {
           <InputGroup>
             <Input
               placeholder="Enter Your Password"
-              type="password"
+              type={show ? "text" : "password"}
               onChange={(e) => setPassword(e.target.value)}
             ></Input>
             <InputRightElement width="4.5rem">
-              <Button h="1.75rem" size="sm">
-                {FaEye} Show
-                {/* {FaEyeSlash} Hide*/}
+              <Button h="1.75rem" size="sm" onClick={handleClick}>
+                {show ? "HIDE" : "SHOW"}
               </Button>
             </InputRightElement>
           </InputGroup>
         </FormControl>
+        <FormControl id="confirmPassword" isRequired>
+          <FormLabel>Confirm Password</FormLabel>
+          <InputGroup>
+            <Input
+              placeholder="Confirm Your Password"
+              type={show ? "text" : "password"}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            ></Input>
+            <InputRightElement width="4.5rem">
+              <Button h="1.75rem" size="sm" onClick={handleClick}>
+                {show ? "HIDE" : "SHOW"}
+              </Button>
+            </InputRightElement>
+          </InputGroup>
+        </FormControl>
+        <FormControl id="pic">
+          <FormLabel>Profile Picture</FormLabel>
+          <Input
+            placeholder="Enter Your Profile Picture URL"
+            defaultValue=""
+            onChange={(e) => setPic(e.target.value)}
+          ></Input>
+        </FormControl>
+        <Button colorScheme="teal" type="submit">
+          Sign Up
+        </Button>
       </VStack>
     </div>
   );

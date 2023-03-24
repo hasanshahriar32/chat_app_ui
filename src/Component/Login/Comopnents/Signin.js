@@ -19,7 +19,7 @@ const Signin = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    fetch("https://chat-app-server-ten.vercel.app/api/signin", {
+    fetch("https://chat-app-server-ten.vercel.app/api/user/login", {
       method: "post",
       headers: {
         "Content-Type": "application/json",

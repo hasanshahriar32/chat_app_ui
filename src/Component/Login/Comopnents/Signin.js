@@ -32,18 +32,19 @@ const Signin = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data.error) {
-          // alert(data.error);
           toast({
-            description: `${data.message}`,
+            title: "Error.",
+            description: `${data.error}`,
             status: "error",
             duration: 9000,
             isClosable: true,
           });
         } else {
-          // alert(data.message);
+          localStorage.setItem("jwt", data.token);
+          localStorage.setItem("user", JSON.stringify(data.user));
           toast({
-            title: "Login Successful",
-            description: "You've been successfully logged in",
+            title: "Logged In.",
+            description: "You are logged in successfully",
             status: "success",
             duration: 9000,
             isClosable: true,
@@ -95,6 +96,12 @@ const Signin = () => {
           onClick={() => {
             setEmail("guest@example.com");
             setPassword("guest123");
+            toast({
+              description: "Currently Not Available.",
+              status: "warning",
+              duration: 9000,
+              isClosable: true,
+            });
           }}
         >
           Sign In as Guest

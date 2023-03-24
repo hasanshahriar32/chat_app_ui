@@ -21,6 +21,38 @@ const SignUp = () => {
   const [pic, setPic] = useState();
 
   const handleClick = () => setShow(!show);
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    if (password !== confirmPassword) {
+      alert("Password and Confirm Password must be same");
+    } else {
+      fetch("https://chat-app-server-ten.vercel.app/api/signup", {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+          pic,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.error) {
+            alert(data.error);
+          } else {
+            alert(data.message);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+
   return (
     <div>
       <VStack
@@ -81,7 +113,7 @@ const SignUp = () => {
             onChange={(e) => setPic(e.target.value)}
           ></Input>
         </FormControl>
-        <Button colorScheme="teal" type="submit">
+        <Button colorScheme="teal" type="submit" onClick={submitHandler}>
           Sign Up
         </Button>
       </VStack>

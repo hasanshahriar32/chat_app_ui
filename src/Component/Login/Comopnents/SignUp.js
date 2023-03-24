@@ -27,7 +27,7 @@ const SignUp = () => {
     if (password !== confirmPassword) {
       alert("Password and Confirm Password must be same");
     } else {
-      fetch("https://chat-app-server-ten.vercel.app/api/signup", {
+      fetch("https://chat-app-server-ten.vercel.app/api/user", {
         method: "post",
         headers: {
           "Content-Type": "application/json",

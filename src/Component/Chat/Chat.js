@@ -1,6 +1,6 @@
 import { Box, Container, Text } from "@chakra-ui/react";
 import React, { useEffect, useRef, useState } from "react";
-import BIRDS from "vanta/dist/vanta.net.min";
+import BIRDS from "vanta/dist/vanta.birds.min";
 // Make sure window.THREE is defined, e.g. by including three.min.js in the document head using a <script> tag
 import "./Chat.css";
 

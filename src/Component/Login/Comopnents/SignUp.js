@@ -9,6 +9,7 @@ import {
   StackDivider,
   VStack,
 } from "@chakra-ui/react";
+import { useToast } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 
@@ -19,13 +20,21 @@ const SignUp = () => {
   const [password, setPassword] = useState();
   const [confirmPassword, setConfirmPassword] = useState();
   const [pic, setPic] = useState();
+  const toast = useToast();
 
   const handleClick = () => setShow(!show);
 
   const submitHandler = (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      alert("Password and Confirm Password must be same");
+      // alert("Password and Confirm Password must be same");
+      toast({
+        title: "Mismatch.",
+        description: "Password and Confirm Password must be same",
+        status: "warning",
+        duration: 9000,
+        isClosable: true,
+      });
     } else {
       fetch("https://chat-app-server-ten.vercel.app/api/user", {
         method: "post",
@@ -42,9 +51,22 @@ const SignUp = () => {
         .then((res) => res.json())
         .then((data) => {
           if (data.error) {
-            alert(data.error);
+            // alert(data.error);
+            toast({
+              description: `${data.error}`,
+              status: "error",
+              duration: 9000,
+              isClosable: true,
+            });
           } else {
-            alert(data.message);
+            // alert(data.message);
+            toast({
+              title: "Account created.",
+              description: "We've created your account for you.",
+              status: "success",
+              duration: 9000,
+              isClosable: true,
+            });
           }
         })
         .catch((err) => {

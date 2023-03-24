@@ -31,10 +31,10 @@ const Signin = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.error) {
+        if (data.message=="Invalid email or password") {
           toast({
             title: "Error.",
-            description: `${data.error}`,
+            description: `${data.message}`,
             status: "error",
             duration: 9000,
             isClosable: true,

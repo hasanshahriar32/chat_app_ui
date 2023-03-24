@@ -75,6 +75,17 @@ const Signin = () => {
         <Button colorScheme="teal" type="submit" onClick={submitHandler}>
           Sign In
         </Button>
+        <Button
+          variant="solid"
+          colorScheme="red"
+          width="100%"
+          onClick={() => {
+            setEmail("guest@example.com");
+            setPassword("guest123");
+          }}
+        >
+          Sign In as Guest
+        </Button>
       </VStack>
     </div>
   );

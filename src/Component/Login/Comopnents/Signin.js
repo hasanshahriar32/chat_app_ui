@@ -10,6 +10,7 @@ import {
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useToast } from "@chakra-ui/react";
+import { useLocation, useNavigate, useNavigation } from "react-router-dom";
 
 const Signin = () => {
   const [show, setShow] = useState(false);
@@ -17,6 +18,12 @@ const Signin = () => {
   const [password, setPassword] = useState();
   const handleClick = () => setShow(!show);
   const toast = useToast();
+
+  //navigate to home
+  let location = useLocation();
+  const from = location.state?.from?.pathname || "/";
+  const navigate = useNavigate();
+
   const submitHandler = (e) => {
     e.preventDefault();
     fetch("https://chat-app-server-ten.vercel.app/api/user/login", {
@@ -31,7 +38,7 @@ const Signin = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.message=="Invalid email or password") {
+        if (data.message == "Invalid email or password") {
           toast({
             title: "Error.",
             description: `${data.message}`,
@@ -40,8 +47,9 @@ const Signin = () => {
             isClosable: true,
           });
         } else {
+          localStorage.setItem("user", JSON.stringify(data));
           localStorage.setItem("jwt", data.token);
-          localStorage.setItem("user", JSON.stringify(data.user));
+
           toast({
             title: "Logged In.",
             description: "You are logged in successfully",
@@ -49,6 +57,9 @@ const Signin = () => {
             duration: 9000,
             isClosable: true,
           });
+          //navigate after setting items to localstorage
+          // navigate(from);
+          navigate(from, { replace: true });
         }
       })
       .catch((err) => {
@@ -68,6 +79,7 @@ const Signin = () => {
           <Input
             placeholder="Enter Your Email Address"
             type="email"
+            value={email}
             onChange={(e) => setEmail(e.target.value)}
           ></Input>
         </FormControl>
@@ -77,6 +89,7 @@ const Signin = () => {
             <Input
               placeholder="Enter Your Password"
               type={show ? "text" : "password"}
+              value={password}
               onChange={(e) => setPassword(e.target.value)}
             ></Input>
             <InputRightElement width="4.5rem">
@@ -97,14 +110,14 @@ const Signin = () => {
             setEmail("guest@example.com");
             setPassword("guest123");
             toast({
-              description: "Currently Not Available.",
+              description: "Do not send personal information at guest mode!!",
               status: "warning",
               duration: 9000,
               isClosable: true,
             });
           }}
         >
-          Sign In as Guest
+          Get Guest Credential
         </Button>
       </VStack>
     </div>

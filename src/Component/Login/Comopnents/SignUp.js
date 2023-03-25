@@ -11,7 +11,8 @@ import {
 } from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { FaEyeSlash, FaEye } from "react-icons/fa";
+// import { FaEyeSlash, FaEye } from "react-icons/fa";
+import { useLocation, useNavigate, useNavigation } from "react-router-dom";
 
 const SignUp = () => {
   const [show, setShow] = useState(false);
@@ -21,6 +22,11 @@ const SignUp = () => {
   const [confirmPassword, setConfirmPassword] = useState();
   const [pic, setPic] = useState();
   const toast = useToast();
+
+  //navigate to home
+  let location = useLocation();
+  const from = location.state?.from?.pathname || "/";
+  const navigate = useNavigate();
 
   const handleClick = () => setShow(!show);
 
@@ -67,10 +73,24 @@ const SignUp = () => {
               duration: 9000,
               isClosable: true,
             });
+            localStorage.setItem("user", JSON.stringify(data));
+            localStorage.setItem("jwt", data.token);
+            //navigate after setting items to localstorage
+            // navigate(from);
+            navigate(from, { replace: true });
           }
         })
         .catch((err) => {
           console.log(err);
+          
+          toast({
+              description: err,
+              status: "error",
+              duration: 9000,
+              isClosable: true,})
+
+
+
         });
     }
   };

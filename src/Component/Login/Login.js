@@ -8,12 +8,21 @@ import {
   Tabs,
   Text,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { ChatContext } from "../../Context/ChatProvider";
 import Signin from "./Comopnents/Signin";
 import SignUp from "./Comopnents/SignUp";
 import "./Login.css";
 
 const Login = () => {
+  const { user, setUser } = useContext(ChatContext);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
   return (
     <div className="login-background">
       {" "}

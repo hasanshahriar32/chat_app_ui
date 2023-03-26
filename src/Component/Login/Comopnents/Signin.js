@@ -8,14 +8,16 @@ import {
   StackDivider,
   VStack,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useToast } from "@chakra-ui/react";
 import { useLocation, useNavigate, useNavigation } from "react-router-dom";
+import { ChatContext } from "../../../Context/ChatProvider";
 
 const Signin = () => {
   const [show, setShow] = useState(false);
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+  const { user, setUser } = useContext(ChatContext);
   const handleClick = () => setShow(!show);
   const toast = useToast();
 
@@ -49,6 +51,7 @@ const Signin = () => {
         } else {
           localStorage.setItem("user", JSON.stringify(data));
           localStorage.setItem("jwt", data.token);
+          setUser(data);
 
           toast({
             title: "Logged In.",

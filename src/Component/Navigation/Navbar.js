@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   Box,
   Flex,
@@ -11,16 +11,20 @@ import {
 import { HiMenu, HiX } from "react-icons/hi";
 import { RxAvatar, RxMoon } from "react-icons/rx";
 import { NavLink } from "react-router-dom";
-import { SlLogin } from "react-icons/sl";
+import { SlLogin, SlLogout } from "react-icons/sl";
 import { VscColorMode } from "react-icons/vsc";
+import { ChatContext } from "../../Context/ChatProvider";
 
 const Navbar = () => {
   const { toggleColorMode } = useColorMode();
   const textColor = useColorModeValue("gray.700", "white");
-
+  const { user, setUser } = useContext(ChatContext);
   const [show, setShow] = React.useState(false);
   const handleToggle = () => setShow(!show);
-
+  const handleLogout = () => {
+    setUser();
+    window.localStorage.clear();
+  };
   return (
     <Flex
       as="nav"
@@ -36,6 +40,7 @@ const Navbar = () => {
           <Box style={{ marginRight: 50 }} fontSize="lg" fontWeight="bold">
             ChatFriend
           </Box>
+          {user && <Box>Welcome, {user?.name}</Box>}
         </NavLink>
       </Box>
       <Spacer />
@@ -88,9 +93,15 @@ const Navbar = () => {
         onClick={toggleColorMode}
       />
       <Box style={{ marginLeft: 30 }}>
-        <NavLink to="/login">
-          <SlLogin fontWeight="5" />
-        </NavLink>
+        {user ? (
+          <NavLink onClick={() => handleLogout()}>
+            <SlLogout fontWeight="5" />
+          </NavLink>
+        ) : (
+          <NavLink to="/login">
+            <SlLogin fontWeight="5" />
+          </NavLink>
+        )}
       </Box>
     </Flex>
   );

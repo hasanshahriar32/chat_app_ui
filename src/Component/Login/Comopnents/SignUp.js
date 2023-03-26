@@ -10,9 +10,10 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 // import { FaEyeSlash, FaEye } from "react-icons/fa";
 import { useLocation, useNavigate, useNavigation } from "react-router-dom";
+import { ChatContext } from "../../../Context/ChatProvider";
 
 const SignUp = () => {
   const [show, setShow] = useState(false);
@@ -20,6 +21,7 @@ const SignUp = () => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [confirmPassword, setConfirmPassword] = useState();
+  const { user, setUser } = useContext(ChatContext);
   const [pic, setPic] = useState();
   const toast = useToast();
 
@@ -66,6 +68,7 @@ const SignUp = () => {
             });
           } else {
             // alert(data.message);
+            setUser(data);
             toast({
               title: "Account created.",
               description: "We've created your account for you.",
@@ -82,15 +85,13 @@ const SignUp = () => {
         })
         .catch((err) => {
           console.log(err);
-          
+
           toast({
-              description: err,
-              status: "error",
-              duration: 9000,
-              isClosable: true,})
-
-
-
+            description: err,
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
         });
     }
   };

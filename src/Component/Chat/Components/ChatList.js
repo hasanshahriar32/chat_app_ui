@@ -25,7 +25,16 @@ const ChatList = () => {
       <>
         <div className="flex gap-2 m-2">
           <Box>
-            <Input id="username" placeholder={"search user"} />
+            <Input
+              id="username"
+              _light={{
+                bg: "gray.100",
+              }}
+              _dark={{
+                bg: "gray.800",
+              }}
+              placeholder={"search user"}
+            />
           </Box>
           <Button
             leftIcon={<TiGroupOutline />}

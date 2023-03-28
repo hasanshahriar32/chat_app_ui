@@ -35,14 +35,16 @@ const Chat = (props) => {
   console.log(user);
   return (
     <div className="chat " ref={myRef}>
-      <div class="grid grid-flow-row-dense  w-[100vw] grid-cols-2 lg:grid-cols-12 grid-rows-1 ">
-        <div className="col-span-5 ">
-          <ChatList></ChatList>
+      {user && (
+        <div className="grid grid-flow-row-dense  w-[100vw] grid-cols-2 lg:grid-cols-12 grid-rows-1 ">
+          <div className="col-span-5 ">
+            <ChatList></ChatList>
+          </div>
+          <div className="col-span-7   lg:block hidden">
+            <MessageSection></MessageSection>
+          </div>
         </div>
-        <div class="col-span-7   lg:block hidden">
-          <MessageSection></MessageSection>
-        </div>
-      </div>
+      )}
     </div>
   );
 };

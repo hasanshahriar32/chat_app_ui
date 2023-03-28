@@ -178,7 +178,7 @@ const ChatList = () => {
           {
             //create dropdown list of users from search result
 
-            <Container className="absolute top-14 h-2/3 z-10  ">
+            <Container position="absolute" top="10%" zIndex={20}>
               {(loading || loadingChat) && (
                 <Container
                   _light={{ color: "gray.100" }}

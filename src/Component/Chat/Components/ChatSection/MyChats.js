@@ -66,7 +66,7 @@ const MyChats = () => {
       w="100%"
       borderColor="whiteAlpha.400"
       m="5"
-      className=" absolute z-20 max-h-fit m-6"
+      className=" absolute z-10 max-h-fit m-6"
       borderRadius="lg"
       borderWidth="1px"
     >

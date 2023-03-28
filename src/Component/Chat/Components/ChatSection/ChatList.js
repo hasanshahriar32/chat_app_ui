@@ -15,6 +15,7 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  Spinner,
   Stack,
   Toast,
   useDisclosure,
@@ -24,8 +25,9 @@ import React, { useContext, useState } from "react";
 import { TiGroupOutline } from "react-icons/ti";
 import { BiSearchAlt } from "react-icons/bi";
 import { MdPersonSearch } from "react-icons/md";
-import { ChatContext } from "../../../Context/ChatProvider";
+import { ChatContext } from "../../../../Context/ChatProvider";
 import axios from "axios";
+import MyChats from "./MyChats";
 const ChatList = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const iconSearch = MdPersonSearch;
@@ -34,9 +36,17 @@ const ChatList = () => {
   const [searchResultOpen, setSearchResultOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [loadingChat, setLoadingChat] = useState();
-  const { user, setUser } = useContext(ChatContext);
+  const { user, setUser, setSelectedChat, chats, setChats } =
+    useContext(ChatContext);
+
   const toast = useToast();
   const handleSearch = async () => {
+    setLoading(true);
+    if (searchResultOpen) {
+      setSearch("");
+      setLoading(false);
+    }
+
     if (!search) {
       toast({
         description: "please enter something to search",
@@ -62,11 +72,9 @@ const ChatList = () => {
       );
       setLoading(false);
       setSearchResult(data);
+      // console.log(data);
       setSearchResultOpen(!searchResultOpen);
-      console.log(data);
-      if (searchResultOpen) {
-        setSearch("");
-      }
+
       if (!searchResultOpen && data.length === 0) {
         toast({
           title: "User not found.",
@@ -86,19 +94,58 @@ const ChatList = () => {
       });
     }
   };
+
+  const accessChat = async (userId) => {
+    try {
+      setLoadingChat(true);
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      const { data } = await axios.post(
+        "https://chat-app-server-ten.vercel.app/api/chat",
+        { userId },
+        config
+      );
+      // if (!chats.find((c) => c._id === data._id)) {
+      //   setChats([data, ...chats]);
+      // }
+      console.log(chats);
+      setSelectedChat(data);
+      setLoadingChat(false);
+      setSearchResultOpen(!searchResultOpen);
+      console.log(data);
+    } catch (error) {
+      toast({
+        title: "Error Occurred!",
+        description: "Failed to create chat!",
+        status: "error",
+        duration: 4000,
+        isClosable: true,
+      });
+      setLoadingChat(false);
+    }
+  };
   return (
     <div>
       <>
         <div className="flex justify-evenly items-center gap-2 m-2">
-          <Box className="w-[80%]">
+          <Box cursor="pointer" className="w-[80%]">
             <InputGroup title="search user to chat">
               <Input
+                className="hover:bg-primary-content"
+                type="email"
                 id="username"
                 _light={{
                   bg: "gray.100",
                 }}
                 _dark={{
                   bg: "gray.800",
+                }}
+                _hover={{
+                  borderBlockColor: "gray.300",
                 }}
                 placeholder={"search user with email"}
                 value={search}
@@ -122,13 +169,20 @@ const ChatList = () => {
             colorScheme="teal"
             onClick={onOpen}
           ></Button>
+
           {
             //create dropdown list of users from search result
 
             searchResult && searchResultOpen && (
               <Container h="20vh" className="absolute top-14 h-2/3 z-10  w-1/2">
+                {(loading || loadingChat) && (
+                  <div className="flex gap-2 items-center">
+                    <span>loading</span> <Spinner size="sm" d="flex"></Spinner>
+                  </div>
+                )}
                 {searchResult.map((user) => (
                   <Box
+                    onClick={() => accessChat(user?._id)}
                     gap={2}
                     _light={{
                       bg: "gray.100",
@@ -188,6 +242,7 @@ const ChatList = () => {
           </DrawerContent>
         </Drawer>
       </>
+      <MyChats></MyChats>
     </div>
   );
 };

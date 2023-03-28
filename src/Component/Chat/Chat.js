@@ -5,7 +5,7 @@ import BIRDS from "vanta/dist/vanta.birds.min";
 import { ChatContext } from "../../Context/ChatProvider";
 // Make sure window.THREE is defined, e.g. by including three.min.js in the document head using a <script> tag
 import "./Chat.css";
-import ChatList from "./Components/ChatList";
+import ChatList from "./Components/ChatSection/ChatList";
 import MessageSection from "./Components/MessageSection";
 
 const Chat = (props) => {
@@ -32,7 +32,7 @@ const Chat = (props) => {
     navigate("/login");
   }
 
-  console.log(user);
+  // console.log(user);
   return (
     <div className="chat " ref={myRef}>
       {user && (

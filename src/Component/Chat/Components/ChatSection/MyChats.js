@@ -1,10 +1,11 @@
-import { useToast } from "@chakra-ui/react";
+import { Box, Container, Stack, Text, useToast } from "@chakra-ui/react";
 import axios from "axios";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { getSender } from "../../../../Config/ChatLogics";
 import { ChatContext } from "../../../../Context/ChatProvider";
 
 const MyChats = () => {
-  const { user, setUser, setSelectedChat, chats, setChats } =
+  const { user, setUser, selectedChat, setSelectedChat, chats, setChats } =
     useContext(ChatContext);
   const [loggedUser, setLoggedUser] = useState();
   const toast = useToast();
@@ -32,7 +33,74 @@ const MyChats = () => {
     }
   };
 
-  return <div className=" absolute z-500"></div>;
+  useEffect(() => {
+    setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
+    fetchChats();
+  }, []);
+
+  return (
+    <Container
+      maxW="md"
+      d={{ base: selectedChat ? "none" : "flex", md: "flex" }}
+      flexDir="column"
+      alignItems="center"
+      justifyContent="center"
+      p={3}
+      _light={{
+        //   bg: "gray.100",
+        color: "gray.100",
+      }}
+      // _dark={{
+      //   bg: "gray.800",
+      // }}
+      // bg="transparent"
+      // bgOpacity={0.5}
+      // w={{ base: "100%", md: "31%" }}
+      w="100%"
+      borderColor="whiteAlpha.400"
+      m="5"
+      className=" absolute z-500 max-h-fit m-6"
+      borderRadius="lg"
+      borderWidth="1px"
+    >
+      <Box
+        d="flex"
+        flexDir="column"
+        p={3}
+        bg="whiteAlpha.200"
+        w="100%"
+        h="100%"
+        borderRadius="lg"
+        overflow="hidden"
+      >
+        {chats ? (
+          <Stack h="lg" overflowY="scroll">
+            {chats.map((chat) => (
+              <Box
+                onClick={() => setSelectedChat(chat)}
+                cursor="pointer"
+                bg={selectedChat === chat ? "#38B2AC" : "E8E8E8"}
+                // color={selectedChat === chat ? "white" : "blackAlpha.100"}
+                px={3}
+                py={2}
+                _hover={{ bg: "cyan.900" }}
+                borderRadius="lg"
+                key={chat?.id}
+              >
+                <Text>
+                  {!chat?.isGroupChat
+                    ? getSender(loggedUser, chat?.users)
+                    : chat?.chatName}
+                </Text>
+              </Box>
+            ))}
+          </Stack>
+        ) : (
+          "loading"
+        )}
+      </Box>
+    </Container>
+  );
 };
 
 export default MyChats;

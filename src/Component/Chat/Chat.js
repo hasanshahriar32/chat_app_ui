@@ -34,7 +34,7 @@ const Chat = (props) => {
 
   // console.log(user);
   return (
-    <div className="chat " ref={myRef}>
+    <div className="chat !!bg-[#07192F]" ref={myRef}>
       {user && (
         <div className="grid grid-flow-row-dense  w-[100vw] grid-cols-2 lg:grid-cols-12 grid-rows-1 ">
           <div className="col-span-5 ">

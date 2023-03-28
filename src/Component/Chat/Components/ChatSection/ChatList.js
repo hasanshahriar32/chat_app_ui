@@ -41,13 +41,14 @@ const ChatList = () => {
 
   const toast = useToast();
   const handleSearch = async () => {
-    setLoading(true);
+    // setLoading(true);
     if (searchResultOpen) {
       setSearch("");
       setLoading(false);
     }
 
     if (!search) {
+      setSearch("");
       toast({
         description: "please enter something to search",
         status: "warning",
@@ -55,8 +56,12 @@ const ChatList = () => {
         isClosable: true,
         // position: "top-right",
       });
+      setSearchResultOpen(false);
+
       return;
     }
+    setLoading(true);
+
     try {
       setLoading(true);
 
@@ -109,14 +114,14 @@ const ChatList = () => {
         { userId },
         config
       );
-      // if (!chats.find((c) => c._id === data._id)) {
-      //   setChats([data, ...chats]);
-      // }
+      if (!chats.find((c) => c._id === data._id)) setChats([data, ...chats]);
+
       console.log(chats);
       setSelectedChat(data);
       setLoadingChat(false);
       setSearchResultOpen(!searchResultOpen);
       console.log(data);
+      setSearch("");
     } catch (error) {
       toast({
         title: "Error Occurred!",
@@ -173,14 +178,19 @@ const ChatList = () => {
           {
             //create dropdown list of users from search result
 
-            searchResult && searchResultOpen && (
-              <Container h="20vh" className="absolute top-14 h-2/3 z-10  w-1/2">
-                {(loading || loadingChat) && (
-                  <div className="flex gap-2 items-center">
-                    <span>loading</span> <Spinner size="sm" d="flex"></Spinner>
-                  </div>
-                )}
-                {searchResult.map((user) => (
+            <Container className="absolute top-14 h-2/3 z-10  ">
+              {(loading || loadingChat) && (
+                <Container
+                  _light={{ color: "gray.100" }}
+                  className="flex gap-2 items-center"
+                >
+                  <span>loading</span> <Spinner size="sm" d="flex"></Spinner>
+                </Container>
+              )}
+              {searchResult &&
+                searchResultOpen &&
+                search !== 0 &&
+                searchResult.map((user) => (
                   <Box
                     onClick={() => accessChat(user?._id)}
                     gap={2}
@@ -200,8 +210,7 @@ const ChatList = () => {
                     {/* <Divider></Divider> */}
                   </Box>
                 ))}
-              </Container>
-            )
+            </Container>
           }
         </div>
         <Drawer
@@ -242,7 +251,9 @@ const ChatList = () => {
           </DrawerContent>
         </Drawer>
       </>
-      <MyChats></MyChats>
+      <Box className="flex justify-center lg:justify-start">
+        <MyChats></MyChats>
+      </Box>
     </div>
   );
 };

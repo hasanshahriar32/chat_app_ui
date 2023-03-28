@@ -90,6 +90,14 @@ const MyChats = () => {
                 // color={selectedChat === chat ? "white" : "blackAlpha.100"}
                 px={3}
                 py={2}
+                _light={{
+                  //   bg: "gray.100",
+                  color: "gray.100",
+                }}
+                _dark={{
+                  // bg: "gray.800",
+                  color: "gray.300",
+                }}
                 _hover={{ bg: "cyan.900" }}
                 borderRadius="lg"
                 key={chat?.id}

@@ -1,4 +1,11 @@
-import { Box, Container, Stack, Text, useToast } from "@chakra-ui/react";
+import {
+  Box,
+  Container,
+  Divider,
+  Stack,
+  Text,
+  useToast,
+} from "@chakra-ui/react";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { getSender } from "../../../../Config/ChatLogics";
@@ -79,7 +86,7 @@ const MyChats = () => {
               <Box
                 onClick={() => setSelectedChat(chat)}
                 cursor="pointer"
-                bg={selectedChat === chat ? "#38B2AC" : "E8E8E8"}
+                bg={selectedChat === chat ? "#38B2AC" : "gray.800"}
                 // color={selectedChat === chat ? "white" : "blackAlpha.100"}
                 px={3}
                 py={2}

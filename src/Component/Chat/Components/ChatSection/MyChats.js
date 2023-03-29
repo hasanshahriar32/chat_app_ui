@@ -2,6 +2,9 @@ import {
   Box,
   Container,
   Divider,
+  Skeleton,
+  SkeletonCircle,
+  SkeletonText,
   Stack,
   Text,
   useToast,
@@ -16,8 +19,10 @@ const MyChats = () => {
     useContext(ChatContext);
   const [loggedUser, setLoggedUser] = useState();
   const toast = useToast();
+  const [loading, setLoading] = useState(false);
   const fetchChats = async () => {
     try {
+      setLoading(true);
       const config = {
         headers: {
           Authorization: `Bearer ${user.token}`,
@@ -28,8 +33,10 @@ const MyChats = () => {
         config
       );
       setChats(data);
+      setLoading(false);
       console.log(data);
     } catch (error) {
+      setLoading(false);
       toast({
         title: "Error Occurred.",
         description: "Failed to load the chats!",
@@ -80,7 +87,7 @@ const MyChats = () => {
         borderRadius="lg"
         overflow="hidden"
       >
-        {chats ? (
+        {!loading ? (
           <Stack h="lg" overflowY="scroll">
             {chats.map((chat) => (
               <Box
@@ -111,7 +118,23 @@ const MyChats = () => {
             ))}
           </Stack>
         ) : (
-          "loading"
+          <Stack h="lg">
+            <SkeletonCircle
+              startColor="pink.500"
+              endColor="orange.500"
+              size="10"
+            />
+            <SkeletonText
+              mt="4"
+              noOfLines={17}
+              rounded="lg"
+              spacing="4"
+              skeletonHeight="8"
+            />
+            {/* <Skeleton noOfLines={4} rounded="lg" height="50px" />
+            <Skeleton rounded="lg" height="50px" />
+            <Skeleton rounded="lg" height="50px" /> */}
+          </Stack>
         )}
       </Box>
     </Container>

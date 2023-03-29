@@ -126,7 +126,7 @@ const MyChats = () => {
             />
             <SkeletonText
               mt="4"
-              noOfLines={17}
+              noOfLines={10}
               rounded="lg"
               spacing="4"
               skeletonHeight="8"

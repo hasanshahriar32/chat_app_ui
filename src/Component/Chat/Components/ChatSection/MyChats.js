@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Box,
   Container,
   Divider,
@@ -11,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { getSender } from "../../../../Config/ChatLogics";
+import { getSender, getSenderPic } from "../../../../Config/ChatLogics";
 import { ChatContext } from "../../../../Context/ChatProvider";
 
 const MyChats = () => {
@@ -108,7 +109,18 @@ const MyChats = () => {
                 _hover={{ bg: "cyan.900" }}
                 borderRadius="lg"
                 key={chat?.id}
+                display="flex"
+                gap="2"
+                alignItems="center"
               >
+                {" "}
+                {!chat?.isGroupChat && (
+                  <Avatar
+                    size="md"
+                    name={getSender(loggedUser, chat?.users)}
+                    src={getSenderPic(loggedUser, chat?.users)}
+                  />
+                )}
                 <Text>
                   {!chat?.isGroupChat
                     ? getSender(loggedUser, chat?.users)

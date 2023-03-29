@@ -11,6 +11,7 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
+  FormControl,
   FormLabel,
   Input,
   InputGroup,
@@ -36,6 +37,12 @@ const ChatList = () => {
   const [searchResultOpen, setSearchResultOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [loadingChat, setLoadingChat] = useState();
+  const [groupChatName, setGroupChatName] = useState();
+  const [selectedUser, setSelectedUser] = useState([]);
+  const [searchGroupMember, setSearchGroupMember] = useState("");
+  const [groupSearchResult, setGroupSearchResult] = useState([]);
+  const [groupLoading, setGroupLoading] = useState(false);
+
   const { user, setUser, setSelectedChat, chats, setChats } =
     useContext(ChatContext);
 
@@ -133,6 +140,64 @@ const ChatList = () => {
       setLoadingChat(false);
     }
   };
+
+  const handleGroupSearch = async (query) => {
+    setSearchGroupMember(query);
+    if (!query) {
+      setSearchGroupMember([]);
+      return;
+    }
+    try {
+      setGroupLoading(true);
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+
+      const { data } = await axios.get(
+        `https://chat-app-server-ten.vercel.app/api/user?search=${searchGroupMember}`,
+        config
+      );
+      setGroupLoading(false);
+      setGroupSearchResult(data);
+      console.log(data);
+    } catch (error) {
+      toast({
+        description: "Failed to fetch search search result!",
+        status: "warning",
+        duration: 2000,
+        isClosable: true,
+      });
+    }
+  };
+
+  const handleGroup = (userToAdd) => {
+    // onOpen();
+    if (selectedUser?.find((u) => u._id === userToAdd._id)) {
+      toast({
+        description: "user already added!",
+        status: "warning",
+        duration: 2000,
+        isClosable: true,
+      });
+      return;
+    }
+    setSelectedUser([...selectedUser, userToAdd]);
+    setGroupSearchResult([]);
+    setSearchGroupMember("");
+
+    // console.log(selectedUser);
+  };
+  const handleGroupSubmit = () => {
+    alert("on development!");
+  };
+
+  const closeDrawer = () => {
+    onClose();
+    setSelectedUser([]);
+  };
+
   return (
     <div>
       <>
@@ -228,25 +293,107 @@ const ChatList = () => {
 
             <DrawerBody>
               <Stack spacing="24px">
-                <Box>
+                <FormControl>
                   <FormLabel htmlFor="groupname">Group Name</FormLabel>
-                  <Input id="groupname" placeholder="Please enter group name" />
-                </Box>
-                <Box>
+                  <Input
+                    id="groupname"
+                    placeholder="Please enter group name"
+                    onChange={(e) => setGroupChatName(e.target.value)}
+                  />
+                </FormControl>
+                <FormControl>
                   <FormLabel htmlFor="username">Member</FormLabel>
                   <Input
                     id="member"
                     placeholder="Please enter user name or email"
+                    onChange={(e) => handleGroupSearch(e.target.value)}
                   />
-                </Box>
+                </FormControl>
               </Stack>
+              {
+                /* selected users  */
+
+                selectedUser?.map((user) => (
+                  <Stack
+                    className="p-1 border rounded my-1"
+                    key={user?._id}
+                    _light={{
+                      bg: "gray.100",
+                    }}
+                    _dark={{
+                      bg: "gray.800",
+                    }}
+                  >
+                    <div className="flex justify-between items-center flex-row overflow-hidden">
+                      <span>{user.name}</span>
+                      {/* create a remove button  */}
+                      <Button
+                        onClick={() =>
+                          setSelectedUser(
+                            selectedUser.filter((u) => u._id !== user._id)
+                          )
+                        }
+                        size="xs"
+                        colorScheme="red"
+                      >
+                        X
+                      </Button>
+                    </div>
+                  </Stack>
+                ))
+              }
+              {
+                //create dropdown list of users from search result
+                groupLoading ? (
+                  <Container
+                    _light={{ color: "gray.700" }}
+                    className="flex gap-2 items-center"
+                  >
+                    <span>loading</span> <Spinner size="sm" d="flex"></Spinner>
+                  </Container>
+                ) : (
+                  groupSearchResult?.slice(0, 7).map(
+                    (user) =>
+                      searchGroupMember !== 0 && (
+                        <Box
+                          key={user?._id}
+                          onClick={() => handleGroup(user)}
+                          gap={2}
+                          _light={{
+                            bg: "gray.100",
+                          }}
+                          _dark={{
+                            bg: "gray.800",
+                          }}
+                          //create a border on hover
+                          _hover={{
+                            border: "1px solid",
+                            borderColor: "gray.300",
+                          }}
+                          className="flex items-center mt-1 rounded-lg gap-2 p-2"
+                        >
+                          <Avatar size="md" name={user.name} src={user.pic} />{" "}
+                          <div className="flex flex-col">
+                            <span className="overflow-hidden">{user.name}</span>
+                            <span className="overflow-hidden">
+                              {user.email}
+                            </span>
+                          </div>
+                          {/* <Divider></Divider> */}
+                        </Box>
+                      )
+                  )
+                )
+              }
             </DrawerBody>
 
             <DrawerFooter borderTopWidth="1px">
-              <Button variant="outline" mr={3} onClick={onClose}>
+              <Button variant="outline" mr={3} onClick={closeDrawer}>
                 Cancel
               </Button>
-              <Button colorScheme="blue">Submit</Button>
+              <Button onClick={handleGroupSubmit} colorScheme="blue">
+                Create!
+              </Button>
             </DrawerFooter>
           </DrawerContent>
         </Drawer>

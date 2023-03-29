@@ -114,13 +114,17 @@ const MyChats = () => {
                 alignItems="center"
               >
                 {" "}
-                {!chat?.isGroupChat && (
+                {!chat?.isGroupChat ? (
                   <Avatar
                     size="md"
                     name={getSender(loggedUser, chat?.users)}
                     src={getSenderPic(loggedUser, chat?.users)}
                   />
-                )}
+                ): <Avatar
+                    size="md"
+                    name={chat?.chatName}
+                    // src={getSenderPic(loggedUser, chat?.users)}
+                  />}
                 <Text>
                   {!chat?.isGroupChat
                     ? getSender(loggedUser, chat?.users)

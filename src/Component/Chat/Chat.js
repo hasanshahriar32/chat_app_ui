@@ -6,7 +6,7 @@ import { ChatContext } from "../../Context/ChatProvider";
 // Make sure window.THREE is defined, e.g. by including three.min.js in the document head using a <script> tag
 import "./Chat.css";
 import ChatList from "./Components/ChatSection/ChatList";
-import MessageSection from "./Components/MessageSection";
+import MessageSection from "./Components/MessageSection/MessageSection";
 
 const Chat = (props) => {
   let location = useLocation();

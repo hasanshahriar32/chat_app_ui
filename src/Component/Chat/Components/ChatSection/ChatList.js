@@ -185,17 +185,63 @@ const ChatList = () => {
     }
     setSelectedUser([...selectedUser, userToAdd]);
     setGroupSearchResult([]);
-    setSearchGroupMember("");
+    // setSearchGroupMember("");
 
     // console.log(selectedUser);
   };
-  const handleGroupSubmit = () => {
-    alert("on development!");
+  const handleGroupSubmit = async () => {
+    // alert("on development!");
+    if (!groupChatName || selectedUser.length === 0) {
+      toast({
+        title: "please fill all field",
+        status: "warning",
+        duration: 2000,
+        isClosable: true,
+      });
+      console.log(groupChatName);
+      selectedUser.map((u) => console.log(u._id));
+      return;
+    }
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      const { data } = await axios.post(
+        "https://chat-app-server-ten.vercel.app/api/chat/group",
+        {
+          chatName: groupChatName,
+          users: JSON.stringify(selectedUser.map((u) => u._id)),
+        },
+
+        config
+      );
+      setChats([data, ...chats]);
+      closeDrawer();
+      toast({
+        title: "Group Created",
+        description: "Say hello to your group members!",
+        status: "success",
+        duration: 2000,
+        isClosable: true,
+      });
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: error.toString(),
+        description: error?.response?.data,
+        status: "warning",
+        duration: 2000,
+        isClosable: true,
+      });
+    }
   };
 
   const closeDrawer = () => {
     onClose();
     setSelectedUser([]);
+    setGroupSearchResult([]);
   };
 
   return (

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import styles from "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
 import {
   MainContainer,
@@ -41,12 +41,27 @@ const MessageSection = () => {
 
     //process message and post to the server
   };
+
+  const [height, setHeight] = useState(window.innerHeight);
+
+  useEffect(() => {
+    function handleResize() {
+      setHeight(window.innerHeight);
+    }
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
   // console.log(selectedChat?.chatName);
   return (
     <div className={selectedChat ? "block" : "hidden lg:block"}>
       <div
-        className="absolute h-screen mt-0 lg:h-[620px] overflow-scroll lg:mt-6  md:px-8  bg-transparent "
-        style={{ position: "relative" }}
+        className="absolute  mt-0 lg: overflow-scroll lg:mt-6  md:px-8  bg-transparent "
+        // style={{ position: "relative" }}
+        style={{ height: `${height}px`, position: "relative" }}
       >
         <button
           onClick={() => setSelectedChat(null)}

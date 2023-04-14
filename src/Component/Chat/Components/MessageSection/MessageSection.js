@@ -45,7 +45,7 @@ const MessageSection = () => {
   return (
     <div className={selectedChat ? "block" : "hidden lg:block"}>
       <div
-        className=" h-screen mt-0 lg:h-[580px] lg:mt-6  md:px-8  bg-transparent "
+        className="absolute h-screen mt-0 lg:h-[620px] overflow-scroll lg:mt-6  md:px-8  bg-transparent "
         style={{ position: "relative" }}
       >
         <button
@@ -69,6 +69,7 @@ const MessageSection = () => {
         <MainContainer>
           <ChatContainer>
             <MessageList
+              className="mb-20"
               // scrollBehavior="smooth"
               typingIndicator={
                 typing ? <TypingIndicator content="hasan is typing" /> : null
@@ -78,7 +79,11 @@ const MessageSection = () => {
                 return <Message key={i} model={message} />;
               })}
             </MessageList>
-            <MessageInput onSend={handleSend} placeholder="Type message here" />
+            <MessageInput
+              className="fixed bottom-20"
+              onSend={handleSend}
+              placeholder="Type message here"
+            />
           </ChatContainer>
         </MainContainer>
       </div>

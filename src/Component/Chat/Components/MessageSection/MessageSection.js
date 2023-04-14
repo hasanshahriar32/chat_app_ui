@@ -45,7 +45,7 @@ const MessageSection = () => {
   return (
     <div className={selectedChat ? "block" : "hidden lg:block"}>
       <div
-        className=" h-[580px] mt-6  md:px-8  bg-transparent "
+        className=" h-screen mt-0 lg:h-[580px] lg:mt-6  md:px-8  bg-transparent "
         style={{ position: "relative" }}
       >
         <button

@@ -44,7 +44,6 @@ const Chat = (props) => {
                 : "block col-span-12 lg:col-span-5"
             }
           >
-            as
             <ChatList></ChatList>
           </div>
           <div className="col-span-12 lg:col-span-7   ">

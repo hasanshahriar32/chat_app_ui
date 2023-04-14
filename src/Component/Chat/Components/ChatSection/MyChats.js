@@ -120,11 +120,13 @@ const MyChats = () => {
                     name={getSender(loggedUser, chat?.users)}
                     src={getSenderPic(loggedUser, chat?.users)}
                   />
-                ): <Avatar
+                ) : (
+                  <Avatar
                     size="md"
                     name={chat?.chatName}
                     // src={getSenderPic(loggedUser, chat?.users)}
-                  />}
+                  />
+                )}
                 <Text>
                   {!chat?.isGroupChat
                     ? getSender(loggedUser, chat?.users)

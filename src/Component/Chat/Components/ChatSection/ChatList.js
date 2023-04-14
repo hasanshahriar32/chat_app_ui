@@ -26,7 +26,7 @@ import React, { useContext, useState } from "react";
 import { TiGroupOutline } from "react-icons/ti";
 import { BiSearchAlt } from "react-icons/bi";
 import { MdPersonSearch } from "react-icons/md";
-import { ChatContext } from "../../../../Context/ChatProvider";
+import { ChatContext, ChatState } from "../../../../Context/ChatProvider";
 import axios from "axios";
 import MyChats from "./MyChats";
 const ChatList = () => {
@@ -198,8 +198,6 @@ const ChatList = () => {
         duration: 2000,
         isClosable: true,
       });
-      console.log(groupChatName);
-      selectedUser.map((u) => console.log(u._id));
       return;
     }
     try {
@@ -208,7 +206,7 @@ const ChatList = () => {
           Authorization: `Bearer ${user.token}`,
         },
       };
-      const { data } = await axios.post(
+      const { data } = await axios.get(
         "https://chat-app-server-ten.vercel.app/api/chat/group",
         {
           chatName: groupChatName,
@@ -245,7 +243,10 @@ const ChatList = () => {
   };
 
   return (
-    <div>
+    <div
+
+    // d={{ base: selectedChat ? "d-none" : "flex", md: "flex" }}
+    >
       <>
         <div className="flex justify-evenly items-center gap-2 m-2">
           <Box cursor="pointer" className="w-[80%]">

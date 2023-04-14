@@ -1,8 +1,8 @@
-import { Box, Container, Divider, Text } from "@chakra-ui/react";
+// import { Box, Container, Divider, Text } from "@chakra-ui/react";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import BIRDS from "vanta/dist/vanta.birds.min";
-import { ChatContext } from "../../Context/ChatProvider";
+import { ChatContext, ChatState } from "../../Context/ChatProvider";
 // Make sure window.THREE is defined, e.g. by including three.min.js in the document head using a <script> tag
 import "./Chat.css";
 import ChatList from "./Components/ChatSection/ChatList";
@@ -31,16 +31,23 @@ const Chat = (props) => {
   if (!user) {
     navigate("/login");
   }
-
+  const { selectedChat } = ChatState();
   // console.log(user);
   return (
     <div className="chat !!bg-[#07192F]" ref={myRef}>
       {user && (
-        <div className="grid grid-flow-row-dense  w-[100vw] grid-cols-2 lg:grid-cols-12 grid-rows-1 ">
-          <div className="col-span-5 ">
+        <div className="grid   w-[100vw] grid-cols-2 lg:grid-cols-12 grid-rows-1 ">
+          <div
+            className={
+              selectedChat
+                ? "hidden lg:block col-span-12 lg:col-span-5"
+                : "block col-span-12 lg:col-span-5"
+            }
+          >
+            as
             <ChatList></ChatList>
           </div>
-          <div className="col-span-7   lg:block hidden">
+          <div className="col-span-12 lg:col-span-7   ">
             <MessageSection></MessageSection>
           </div>
         </div>

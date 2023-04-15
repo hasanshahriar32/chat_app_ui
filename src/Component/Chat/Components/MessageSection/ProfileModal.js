@@ -48,12 +48,21 @@ export default function ProfileModal({ current }) {
       //   setLoading(false);
       console.log(data);
       setSelectedChat(null);
-      toast({
-        title: "Chat Deleted Successfully!",
-        status: "success",
-        duration: 4000,
-        isClosable: true,
-      });
+      if (data.deletedCount > 0) {
+        toast({
+          title: "Chat Deleted Successfully!",
+          status: "success",
+          duration: 4000,
+          isClosable: true,
+        });
+      } else if (data.deletedCount === 0) {
+        toast({
+          title: "Already Deleted!",
+          status: "warning",
+          duration: 4000,
+          isClosable: true,
+        });
+      }
     } catch (error) {
       //   setLoading(false);
       toast({

@@ -189,6 +189,7 @@ const ChatList = () => {
 
     // console.log(selectedUser);
   };
+  // console.log(selectedUser);
   const handleGroupSubmit = async () => {
     // alert("on development!");
     if (!groupChatName || selectedUser.length === 0) {
@@ -206,7 +207,7 @@ const ChatList = () => {
           Authorization: `Bearer ${user.token}`,
         },
       };
-      const { data } = await axios.get(
+      const { data } = await axios.post(
         "https://chat-app-server-ten.vercel.app/api/chat/group",
         {
           chatName: groupChatName,
@@ -215,6 +216,7 @@ const ChatList = () => {
 
         config
       );
+      console.log(data);
       setChats([data, ...chats]);
       closeDrawer();
       toast({

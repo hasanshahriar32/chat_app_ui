@@ -14,11 +14,11 @@ import {
 } from "@chakra-ui/react";
 
 import React, { useContext } from "react";
-import { CgProfile } from "react-icons/cg";
+import { AiOutlineMenuUnfold } from "react-icons/ai";
 import { ChatContext, ChatState } from "../../../../Context/ChatProvider";
 import axios from "axios";
 
-export default function ProfileModal({ current }) {
+export default function GroupModal({ current }) {
   const OverlayTwo = () => (
     <ModalOverlay
       bg="none"
@@ -85,7 +85,7 @@ export default function ProfileModal({ current }) {
           onOpen();
         }}
       >
-        <CgProfile></CgProfile>
+        <AiOutlineMenuUnfold className="text-xl"></AiOutlineMenuUnfold>
       </button>
       <Modal isCentered isOpen={isOpen} onClose={onClose}>
         {overlay}

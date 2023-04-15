@@ -17,6 +17,7 @@ import { Box } from "@chakra-ui/react";
 import ScrollToTopButton from "./ScrollToTopButton";
 import { getSenderFull, getSenderName } from "../../../../Config/ChatLogics";
 import ProfileModal from "./ProfileModal";
+import GroupModal from "./GroupModal";
 
 const MessageSection = () => {
   const [typing, setTyping] = useState(false);
@@ -64,14 +65,14 @@ const MessageSection = () => {
       >
         <button
           onClick={() => setSelectedChat(null)}
-          className="absolute block lg:hidden btn  btn-primary z-10 top-2 left-10"
+          className="absolute block lg:hidden btn btn-sm btn-primary z-10 top-4 left-10"
           direction="left"
         >
           <GiReturnArrow></GiReturnArrow>
         </button>
         {selectedChat && (
           <div
-            className="absolute text-2xl font-bold font-mono text-blue-400  z-10 top-4 left-[150px]"
+            className="absolute mr-20 h-9 overflow-clip text-2xl font-semibold font-mono text-blue-400  z-10 top-4 lg:left-10 left-24"
             direction="right"
           >
             {!selectedChat?.isGroupChat ? (
@@ -86,6 +87,9 @@ const MessageSection = () => {
           <ProfileModal
             current={getSenderFull(user, selectedChat?.users)}
           ></ProfileModal>
+        )}
+        {selectedChat?.isGroupChat === true && (
+          <GroupModal current={selectedChat}></GroupModal>
         )}
 
         <ConversationHeader

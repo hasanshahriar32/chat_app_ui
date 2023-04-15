@@ -161,7 +161,7 @@ const ChatList = () => {
       );
       setGroupLoading(false);
       setGroupSearchResult(data);
-      console.log(data);
+      // console.log(data);
     } catch (error) {
       toast({
         description: "Failed to fetch search search result!",

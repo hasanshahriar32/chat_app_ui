@@ -11,6 +11,7 @@ import {
   Text,
   useToast,
   useDisclosure,
+  AvatarGroup,
 } from "@chakra-ui/react";
 
 import React, { useContext } from "react";
@@ -34,6 +35,15 @@ export default function GroupModal({ current }) {
   const [overlay, setOverlay] = React.useState(<OverlayTwo />);
   const toast = useToast();
   const deleteChat = async () => {
+    if (selectedChat?.groupAdmin?._id !== user?._id) {
+      toast({
+        title: "Only admins can delete the group!",
+        status: "error",
+        duration: 4000,
+        isClosable: true,
+      });
+      return;
+    }
     try {
       //   setLoading(true);
       const config = {
@@ -74,6 +84,8 @@ export default function GroupModal({ current }) {
       });
     }
   };
+  console.log(selectedChat);
+  console.log(user);
 
   //   console.log(current);
   return (
@@ -92,11 +104,15 @@ export default function GroupModal({ current }) {
         <ModalContent>
           <ModalHeader className="flex flex-col gap-2 justify-between items-center">
             {" "}
-            <Avatar size="2xl" name={current?.name} src={current?.pic} />{" "}
-            <span>{current?.name}</span>
+            <AvatarGroup size="md" max={5} min={selectedChat?.users.length}>
+              {selectedChat?.users.map((ava) => (
+                <Avatar key={ava?._id} name={ava?.name} src={ava?.pic} />
+              ))}
+            </AvatarGroup>
+            <span>{selectedChat?.chatName}</span>
           </ModalHeader>
           <ModalCloseButton />
-          <ModalBody className="text-center">Email: {current?.email}</ModalBody>
+          <ModalBody className="text-center"></ModalBody>
           <ModalFooter>
             <Button
               className="mr-2"

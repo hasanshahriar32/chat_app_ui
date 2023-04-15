@@ -35,7 +35,7 @@ const MyChats = () => {
       );
       setChats(data);
       setLoading(false);
-      console.log(data);
+      // console.log(data);
     } catch (error) {
       setLoading(false);
       toast({

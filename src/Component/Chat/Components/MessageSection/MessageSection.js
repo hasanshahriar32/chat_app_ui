@@ -11,24 +11,23 @@ import {
   Button,
 } from "@chatscope/chat-ui-kit-react";
 import { useState } from "react";
+import { GiReturnArrow } from "react-icons/gi";
 import { ChatContext, ChatState } from "../../../../Context/ChatProvider";
 import { Box } from "@chakra-ui/react";
+import ScrollToTopButton from "./ScrollToTopButton";
+import { getSenderFull, getSenderName } from "../../../../Config/ChatLogics";
+import ProfileModal from "./ProfileModal";
 
 const MessageSection = () => {
   const [typing, setTyping] = useState(false);
   const { user, setUser, setSelectedChat, chats, setChats } =
     useContext(ChatContext);
   const { selectedChat } = ChatState();
-  const [messages, setMessages] = useState([
-    {
-      message: "Hello! I am devHive. How can I help you with?",
-      sender: "hasan",
-    },
-  ]);
+  const [messages, setMessages] = useState([]);
   const handleSend = async (messagesend) => {
     const newMessage = {
       message: messagesend,
-      sender: "user",
+      sender: user?.name,
       direction: "outgoing",
     };
 
@@ -65,23 +64,36 @@ const MessageSection = () => {
       >
         <button
           onClick={() => setSelectedChat(null)}
-          className="absolute block lg:hidden btn btn-outline btn-accent z-10 top-2 left-10"
+          className="absolute block lg:hidden btn  btn-primary z-10 top-2 left-10"
           direction="left"
         >
-          Back
+          <GiReturnArrow></GiReturnArrow>
         </button>
-        <div
-          className="absolute text-3xl font-bold font-mono text-blue-400  z-10 top-2 right-10"
-          direction="right"
-        >
-          {selectedChat?.chatName}
-        </div>
+        {selectedChat && (
+          <div
+            className="absolute text-2xl font-bold font-mono text-blue-400  z-10 top-4 left-[150px]"
+            direction="right"
+          >
+            {!selectedChat?.isGroupChat ? (
+              <> {getSenderName(user, selectedChat?.users)} </>
+            ) : (
+              <> {selectedChat?.chatName} </>
+            )}
+          </div>
+        )}
+
+        {selectedChat?.isGroupChat === false && (
+          <ProfileModal
+            current={getSenderFull(user, selectedChat?.users)}
+          ></ProfileModal>
+        )}
+
         <ConversationHeader
           displayname="dsf"
           className="h-16 "
         ></ConversationHeader>
 
-        <MainContainer>
+        <MainContainer className="flex flex-col">
           <ChatContainer>
             <MessageList
               className="mb-20"

@@ -84,8 +84,6 @@ export default function GroupModal({ current }) {
       });
     }
   };
-  console.log(selectedChat);
-  console.log(user);
 
   //   console.log(current);
   return (

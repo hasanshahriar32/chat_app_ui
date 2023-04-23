@@ -19,6 +19,10 @@ import { getSenderFull, getSenderName } from "../../../../Config/ChatLogics";
 import ProfileModal from "./ProfileModal";
 import GroupModal from "./GroupModal";
 import axios from "axios";
+import { io } from "socket.io-client";
+
+const ENDPOINT = "https://chat-app-server-ten.vercel.app";
+var socket, selectedChatCompare;
 
 const MessageSection = () => {
   const [typing, setTyping] = useState(false);
@@ -28,7 +32,22 @@ const MessageSection = () => {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState();
+  const [isTyping, setIsTyping] = useState(false);
   const toast = useToast();
+  const [socketConnected, setSocketConnected] = useState(false);
+  useEffect(() => {
+    socket = io(ENDPOINT);
+    socket.emit("setup", user);
+    socket.on("connected", () => {
+      setSocketConnected(true);
+    });
+    socket.on("typing", () => {
+      setTyping(true);
+    });
+    socket.on("stop typing", () => {
+      setTyping(false);
+    });
+  }, []);
   const fetchMessages = async () => {
     if (!selectedChat) return;
     try {
@@ -44,6 +63,7 @@ const MessageSection = () => {
       );
       console.log(data);
       setLoading(false);
+      socket.emit("join chat", selectedChat._id);
       const modifiedMsg = data.map((message) => ({
         message: message?.content,
         sender: message?.sender?.name,
@@ -63,7 +83,30 @@ const MessageSection = () => {
   };
   useEffect(() => {
     fetchMessages();
+    selectedChatCompare = selectedChat;
   }, [selectedChat]);
+  useEffect(() => {
+    socket.on("message received", (newMessageReceived) => {
+      if (
+        !selectedChatCompare ||
+        selectedChatCompare._id !== newMessageReceived.chat._id
+      ) {
+        //give notification
+      } else {
+        const modifiedMsg = {
+          message: newMessageReceived?.content,
+          sender: newMessageReceived?.sender?.name,
+          direction:
+            newMessageReceived?.sender?._id === user._id
+              ? "outgoing"
+              : "incoming",
+        };
+        setMessages([...messages, modifiedMsg]);
+      }
+    });
+  });
+  console.log(messages);
+
   const handleSend = async (messagesend) => {
     const newMessage = {
       message: messagesend,
@@ -74,6 +117,7 @@ const MessageSection = () => {
     const newMessages = [...messages, newMessage];
     //update our user state
     setMessages(newMessages);
+    socket.emit("stop typing", selectedChat._id);
     try {
       const config = {
         headers: {
@@ -89,6 +133,7 @@ const MessageSection = () => {
         },
         config
       );
+      socket.emit("new message", data);
       // console.log(data);
     } catch (error) {
       toast({
@@ -100,11 +145,28 @@ const MessageSection = () => {
       });
     }
     //set a typing indicator
-    setTyping(true);
+    // setTyping(true);
 
     //process message and post to the server
   };
 
+  const typingHandler = () => {
+    if (!socketConnected) return;
+    if (!typing) {
+      setTyping(true);
+      socket.emit("typing", selectedChat._id);
+    }
+    let lastTypingTime = new Date().getTime();
+    var timerLength = 3000;
+    setTimeout(() => {
+      var timeNow = new Date().getTime();
+      var timeDiff = timeNow - lastTypingTime;
+      if (timeDiff >= timerLength && typing) {
+        socket.emit("stop typing", selectedChat._id);
+        setTyping(false);
+      }
+    }, timerLength);
+  };
   const [height, setHeight] = useState(window.innerHeight);
 
   useEffect(() => {
@@ -161,31 +223,36 @@ const MessageSection = () => {
         ></ConversationHeader>
 
         <MainContainer className="flex flex-col">
-          <ChatContainer>
-            <MessageList
-              className="mb-20"
-              // scrollBehavior="smooth"
-              typingIndicator={
-                typing ? (
-                  <TypingIndicator
-                    content={
-                      selectedChat &&
-                      getSenderName(user, selectedChat?.users) + " is typing"
-                    }
-                  />
-                ) : null
-              }
-            >
-              {messages.map((message, i) => {
-                return <Message key={i} model={message} />;
-              })}
-            </MessageList>
-            <MessageInput
-              className="fixed bottom-20"
-              onSend={handleSend}
-              placeholder="Type message here"
-            />
-          </ChatContainer>
+          {loading ? (
+            "loading"
+          ) : (
+            <ChatContainer>
+              <MessageList
+                className="mb-20"
+                // scrollBehavior="smooth"
+                typingIndicator={
+                  typing ? (
+                    <TypingIndicator
+                    // content={
+                    //   selectedChat &&
+                    //   getSenderName(user, selectedChat?.users) + " is typing"
+                    // }
+                    />
+                  ) : null
+                }
+              >
+                {messages.map((message, i) => {
+                  return <Message key={i} model={message} />;
+                })}
+              </MessageList>
+              <MessageInput
+                onChange={typingHandler}
+                className="fixed bottom-20"
+                onSend={handleSend}
+                placeholder="Type message here"
+              />
+            </ChatContainer>
+          )}
         </MainContainer>
       </div>
     </div>

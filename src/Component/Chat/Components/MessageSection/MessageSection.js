@@ -13,7 +13,13 @@ import {
 import { useState } from "react";
 import { GiReturnArrow } from "react-icons/gi";
 import { ChatContext, ChatState } from "../../../../Context/ChatProvider";
-import { Box, useToast } from "@chakra-ui/react";
+import {
+  Box,
+  SkeletonCircle,
+  SkeletonText,
+  Stack,
+  useToast,
+} from "@chakra-ui/react";
 import ScrollToTopButton from "./ScrollToTopButton";
 import { getSenderFull, getSenderName } from "../../../../Config/ChatLogics";
 import ProfileModal from "./ProfileModal";
@@ -224,7 +230,15 @@ const MessageSection = () => {
 
         <MainContainer className="flex flex-col">
           {loading ? (
-            "loading"
+            <Stack h="lg" className="w-full m-6">
+              <SkeletonText
+                mt="4"
+                noOfLines={11}
+                rounded="lg"
+                spacing="4"
+                skeletonHeight="8"
+              />
+            </Stack>
           ) : (
             <ChatContainer>
               <MessageList

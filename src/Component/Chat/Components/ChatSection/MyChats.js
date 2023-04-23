@@ -12,7 +12,11 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { getSender, getSenderPic } from "../../../../Config/ChatLogics";
+import {
+  getSender,
+  getSenderName,
+  getSenderPic,
+} from "../../../../Config/ChatLogics";
 import { ChatContext } from "../../../../Context/ChatProvider";
 
 const MyChats = () => {
@@ -129,7 +133,7 @@ const MyChats = () => {
                 )}
                 <Text>
                   {!chat?.isGroupChat
-                    ? getSender(loggedUser, chat?.users)
+                    ? getSenderName(user, chat?.users)
                     : chat?.chatName}
                 </Text>
               </Box>

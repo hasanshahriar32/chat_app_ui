@@ -13,11 +13,12 @@ import {
 import { useState } from "react";
 import { GiReturnArrow } from "react-icons/gi";
 import { ChatContext, ChatState } from "../../../../Context/ChatProvider";
-import { Box } from "@chakra-ui/react";
+import { Box, useToast } from "@chakra-ui/react";
 import ScrollToTopButton from "./ScrollToTopButton";
 import { getSenderFull, getSenderName } from "../../../../Config/ChatLogics";
 import ProfileModal from "./ProfileModal";
 import GroupModal from "./GroupModal";
+import axios from "axios";
 
 const MessageSection = () => {
   const [typing, setTyping] = useState(false);
@@ -25,6 +26,44 @@ const MessageSection = () => {
     useContext(ChatContext);
   const { selectedChat } = ChatState();
   const [messages, setMessages] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [newMessage, setNewMessage] = useState();
+  const toast = useToast();
+  const fetchMessages = async () => {
+    if (!selectedChat) return;
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      setLoading(true);
+      const { data } = await axios.get(
+        `https://chat-app-server-ten.vercel.app/api/message/${selectedChat._id}`,
+        config
+      );
+      console.log(data);
+      setLoading(false);
+      const modifiedMsg = data.map((message) => ({
+        message: message?.content,
+        sender: message?.sender?.name,
+        direction: message?.sender?._id === user._id ? "outgoing" : "incoming",
+      }));
+      setMessages(modifiedMsg, ...messages);
+      console.log(modifiedMsg);
+    } catch (error) {
+      toast({
+        title: "Error Occurred!",
+        description: "Failed to load the messages.",
+        status: "error",
+        duration: 4000,
+        isClosable: true,
+      });
+    }
+  };
+  useEffect(() => {
+    fetchMessages();
+  }, [selectedChat]);
   const handleSend = async (messagesend) => {
     const newMessage = {
       message: messagesend,
@@ -35,7 +74,31 @@ const MessageSection = () => {
     const newMessages = [...messages, newMessage];
     //update our user state
     setMessages(newMessages);
-
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      const { data } = await axios.post(
+        "https://chat-app-server-ten.vercel.app/api/message",
+        {
+          content: messagesend,
+          chatId: selectedChat._id,
+        },
+        config
+      );
+      // console.log(data);
+    } catch (error) {
+      toast({
+        title: "Error Occurred!",
+        description: "Failed to send the message.",
+        status: "error",
+        duration: 4000,
+        isClosable: true,
+      });
+    }
     //set a typing indicator
     setTyping(true);
 
@@ -103,7 +166,14 @@ const MessageSection = () => {
               className="mb-20"
               // scrollBehavior="smooth"
               typingIndicator={
-                typing ? <TypingIndicator content="hasan is typing" /> : null
+                typing ? (
+                  <TypingIndicator
+                    content={
+                      selectedChat &&
+                      getSenderName(user, selectedChat?.users) + " is typing"
+                    }
+                  />
+                ) : null
               }
             >
               {messages.map((message, i) => {

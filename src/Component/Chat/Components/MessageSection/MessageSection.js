@@ -27,7 +27,7 @@ import GroupModal from "./GroupModal";
 import axios from "axios";
 import { io } from "socket.io-client";
 
-const ENDPOINT = "https://chat-app-server-ten.vercel.app";
+const ENDPOINT = "https://chat-server-ddtp.onrender.com";
 var socket, selectedChatCompare;
 
 const MessageSection = () => {
